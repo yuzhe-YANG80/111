@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <style>
+        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; }
+        .login-box { width: 300px; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
+        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .error { color: red; font-size: 14px; margin-top: 5px; }
+    </style>
+</head>
+<body>
+    <div class="login-box">
+        <h2>登录</h2>
+        <form id="loginForm">
+            <input type="text" id="username" placeholder="用户名" required>
+            <input type="password" id="password" placeholder="密码" required>
+            <button type="submit">登录</button>
+            <div id="errorMsg" class="error"></div>
+        </form>
+    </div>
+
+    <script>
+        // 预设的“正确”用户名和密码（您可以任意修改）
+        const CORRECT_USERNAME = "admin";
+        const CORRECT_PASSWORD = "123456";
+
+        // 目标跳转网址（换成您想跳转的网站）
+        const TARGET_URL = "https://www.baidu.com";
+
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // 阻止表单实际提交
+
+            // 获取输入值
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMsg');
+
+            // 简单验证
+            if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
+                // 登录成功，跳转到另一个网站
+                window.location.href = TARGET_URL;
+            } else {
+                // 显示错误信息
+                errorDiv.textContent = "用户名或密码错误！";
+            }
+        });
+    </script>
+</body>
+</html>
