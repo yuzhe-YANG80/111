@@ -2,53 +2,283 @@
 <html lang="zh">
 <head>
     <meta charset="UTF-8">
-    <title>登 录</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>请登录</title>
+    <!-- Google Fonts & Font Awesome -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f0f0f0; }
-        .login-box { width: 300px; padding: 30px; background: white; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 4px; }
-        button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        .error { color: red; font-size: 14px; margin-top: 5px; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(145deg, #e0f2e9 0%, #c8e6df 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        /* 柔和光晕背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -20%;
+            left: -10%;
+            width: 80%;
+            height: 80%;
+            background: radial-gradient(circle, rgba(165, 214, 167, 0.4) 0%, rgba(200, 230, 201, 0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -15%;
+            right: -10%;
+            width: 70%;
+            height: 70%;
+            background: radial-gradient(circle, rgba(129, 199, 132, 0.3) 0%, rgba(200, 230, 201, 0) 70%);
+            border-radius: 50%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 登录卡片 — 毛玻璃效果 */
+        .login-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 420px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0, 32, 0, 0.2), 0 2px 6px rgba(0, 0, 0, 0.02);
+            padding: 2rem 1.8rem 2.2rem;
+            transition: transform 0.2s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            text-align: center;
+        }
+
+        .login-card:hover {
+            box-shadow: 0 25px 40px -16px rgba(40, 90, 40, 0.25);
+            transform: translateY(-3px);
+        }
+
+        /* 图标区 */
+        .icon-wrapper {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 1.8rem;
+            box-shadow: 0 8px 14px -6px rgba(30, 70, 30, 0.3);
+        }
+
+        .icon-wrapper i {
+            font-size: 2.6rem;
+            color: white;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
+
+        h1 {
+            font-size: 1.9rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #1f4f2b, #2e7d32);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+            margin-bottom: 0.3rem;
+        }
+
+        .sub {
+            color: #4a6741;
+            font-weight: 500;
+            font-size: 0.85rem;
+            background: rgba(100, 140, 80, 0.15);
+            display: inline-block;
+            padding: 0.2rem 0.9rem;
+            border-radius: 40px;
+            backdrop-filter: blur(2px);
+            margin-bottom: 1.8rem;
+        }
+
+        /* 表单样式 */
+        .input-group {
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: #2a5a2a;
+            margin-bottom: 0.3rem;
+            display: block;
+            letter-spacing: 0.3px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border-radius: 1.2rem;
+            border: 1px solid rgba(60, 90, 50, 0.25);
+            background: rgba(255, 255, 255, 0.9);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            outline: none;
+            color: #1f3b1f;
+        }
+
+        .input-field:focus {
+            border-color: #2e7d32;
+            box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.15);
+            background: white;
+        }
+
+        /* 按钮样式 */
+        .login-btn {
+            width: 100%;
+            background: linear-gradient(105deg, #2e7d32, #1f5e23);
+            color: white;
+            border: none;
+            padding: 0.85rem 1rem;
+            border-radius: 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            box-shadow: 0 8px 18px -6px #1f5e2360;
+            border: 1px solid rgba(255,255,255,0.2);
+            margin-top: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: linear-gradient(105deg, #1f5e23, #154f19);
+            transform: scale(1.02);
+            box-shadow: 0 12px 20px -10px #1b4e1f;
+        }
+
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+
+        .error {
+            color: #c7362b;
+            font-size: 0.8rem;
+            margin-top: 0.8rem;
+            background: rgba(199, 54, 43, 0.08);
+            padding: 0.5rem;
+            border-radius: 1rem;
+            text-align: center;
+        }
+
+        /* 辅助提示 */
+        .demo-hint {
+            margin-top: 1.5rem;
+            font-size: 0.7rem;
+            color: #5a7c50;
+            background: rgba(70, 110, 60, 0.1);
+            padding: 0.4rem 0.8rem;
+            border-radius: 2rem;
+            display: inline-block;
+        }
+
+        .demo-hint i {
+            margin-right: 4px;
+        }
+
+        /* 响应式 */
+        @media (max-width: 480px) {
+            .login-card {
+                padding: 1.6rem 1.4rem 1.8rem;
+            }
+            h1 {
+                font-size: 1.6rem;
+            }
+            .icon-wrapper {
+                width: 60px;
+                height: 60px;
+            }
+            .icon-wrapper i {
+                font-size: 2.2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="login-box">
-        <h2>登录</h2>
-        <h1>欢迎使用碳足迹小程序</h1>
-        <form id="loginForm">
-            <input type="text" id="username" placeholder="用户名" required>
-            <input type="password" id="password" placeholder="密码" required>
-            <button type="submit">登录</button>
-            <div id="errorMsg" class="error"></div>
-        </form>
+<div class="login-card">
+    <div class="icon-wrapper">
+        <i class="fas fa-leaf"></i>
+    </div>
+    <h1>登 录</h1>
+    <div class="sub">
+        
     </div>
 
-    <script>
-        // 预设的“正确”用户名和密码（您可以任意修改）
-        const CORRECT_USERNAME = "admin";
-        const CORRECT_PASSWORD = "123456";
+    <form id="loginForm">
+        <div class="input-group">
+            <label><i class="fas fa-user"></i> 用户名</label>
+            <input type="text" id="username" class="input-field" placeholder="请输入用户名" autocomplete="off" required>
+        </div>
+        <div class="input-group">
+            <label><i class="fas fa-lock"></i> 密码</label>
+            <input type="password" id="password" class="input-field" placeholder="请输入密码" required>
+        </div>
+        <button type="submit" class="login-btn">
+            <i class="fas fa-arrow-right-to-bracket"></i> 登录
+        </button>
+    </form>
 
-        // 目标跳转网址（换成您想跳转的网站）
-        const TARGET_URL = "https://yuzhe-yang80.github.io/YYZ/";
+    
+</div>
 
-        document.getElementById('loginForm').addEventListener('submit', function(event) {
-            event.preventDefault(); // 阻止表单实际提交
+<script>
+    // 预设正确凭据（可修改）
+    const CORRECT_USERNAME = "tanzuji";
+    const CORRECT_PASSWORD = "123456";
+    // 登录成功跳转地址
+    const TARGET_URL = "https://yuzhe-yang80.github.io/333/";
 
-            // 获取输入值
-            const username = document.getElementById('username').value;
-            const password = document.getElementById('password').value;
-            const errorDiv = document.getElementById('errorMsg');
+    const form = document.getElementById('loginForm');
+    const usernameInput = document.getElementById('username');
+    const passwordInput = document.getElementById('password');
+    const errorDiv = document.getElementById('errorMsg');
 
-            // 简单验证
-            if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
-                // 登录成功，跳转到另一个网站
-                window.location.href = TARGET_URL;
-            } else {
-                // 显示错误信息
-                errorDiv.textContent = "用户名或密码错误！";
-            }
-        });
-    </script>
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        const username = usernameInput.value.trim();
+        const password = passwordInput.value;
+
+        if (username === CORRECT_USERNAME && password === CORRECT_PASSWORD) {
+            // 成功跳转
+            window.location.href = TARGET_URL;
+        } else {
+            errorDiv.textContent = "用户名或密码错误，请重试";
+            // 轻微抖动效果（可选，提升体验）
+            errorDiv.style.transform = "translateX(0)";
+            setTimeout(() => {
+                errorDiv.style.transform = "";
+            }, 300);
+        }
+    });
+</script>
 </body>
 </html>
